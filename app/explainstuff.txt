@@ -1,0 +1,21 @@
+how things are connected
+
+user sends request to web server which looks at url (universal resource locator/indicator)..and finds te appropraite dns /server.
+from here the server sends the request to the relevant application using a root path declard in app=Flask(__name__)..eg if the app is named foodie it will use foodie as the root path
+following the root path the request is sent to the views.py in your app and looks at the path eg @app.route("/)..so if this matches to the one in the request then the function eg def main runs .
+views are incharge of sending a response back to the client ,and if the request is invalid an error page is shown
+
+in relation to apis
+the application now becomes the client and sends a request to the api,api sends a response in terms of json object and using request.py the app is able to convert the json response to a python library 
+..models.py are basically classes that are used to model an output from the json response from an api
+
+config.py is for configurations eg devconfig and prodconfig..also here is where you publish a base url for the api
+start.sh is a file that contains sensitive info from secret keys and api keys ,hidden in .gitignore
+manage.py is where some new commands are created that deal with the db
+main is a folder that contains views.py,errors.py,response.py
+templates contain html files eg base.html that allows for template inheritance,macros.html that allows for addition of functions,loops etc in your app
+static contains css,js and images...
+procfile state what protocol and server used
+
+..whenever you find form app import app..ie importing the app insttance is allowing the whole application to be linked 
+init.py allows for content to be exportable
