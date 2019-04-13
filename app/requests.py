@@ -1,16 +1,21 @@
-# This is where we will write code to make requests to our API.
-from app import app
 import urllib.request,json
 # urllib.request module that will help us create a connection to our API URL and send a request and json modules that will format the JSON response to a Python dictionary.
-from .models import movie
-
-Movie = movie.Movie
-
+from .models import Movie
 
 # Getting api key
-api_key = app.config['MOVIE_API_KEY']
+api_key = None
 # Getting the movie base url
-base_url = app.config["MOVIE_API_BASE_URL"]
+base_url = None
+
+
+
+def configure_request(app):
+    global api_key,base_url
+    api_key = app.config['MOVIE_API_KEY']
+    base_url = app.config['MOVIE_API_BASE_URL']
+
+#  configure_request(app) takes in the application instance and replaces the values of the None variables to application configuration objects.
+# Because we cannot access the application instance globally we need to call this function when we create our application instance (in app init.py file). This will give us access to the application configuration objects.
 
 
 def get_movies(category):

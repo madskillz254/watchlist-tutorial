@@ -19,3 +19,8 @@ procfile state what protocol and server used
 
 ..whenever you find form app import app..ie importing the app insttance is allowing the whole application to be linked 
 init.py allows for content to be exportable
+----------------------------------------------
+explanation of the bew structure
+
+How the application instance is created makes it difficult to apply configuration changes dynamically. This is useful when it comes to
+ testing the application under different configurations. To solve this we create a function that can be launched from the script
