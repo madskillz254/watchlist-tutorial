@@ -4,7 +4,7 @@ from app import create_app
 from flask_script import Manager,Server
 
 # Creating app instance
-app = create_app('development')
+app = create_app('production')
 
 manager = Manager(app)
 manager.add_command('server',Server)     # We use the add_command method to create a new command 'server' which will launch our application server.
