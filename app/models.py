@@ -1,4 +1,13 @@
 from . import db
+from werkzeug.security import generate_password_hash,check_password_hash
+from flask_login import UserMixin
+from . import login_manager
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))    # modifies the load_userfunction by passing in a user_id to the function that queries the database and gets a User with that ID.
+
+
 # here we create movie instances from the requests gotten from the api...basically we create atemplatee of what we actually want from the api...a template of the expected outcome
 class Movie:
     '''
@@ -48,11 +57,26 @@ class Review:
         return response
 
 
-class User(db.Model):               # We create a User class that will help us create new users. We pass in db.Model as an argument. This will connect our class to our database and allow communication.
+class User(UserMixin,db.Model):               # We create a User class that will help us create new users. We pass in db.Model as an argument. This will connect our class to our database and allow communication.
         __tablename__ = 'users'      #__tablename__ variable allows us to give the tables in our database proper names. If not used SQLAlchemy will assume that the tablename is the lowercase of the class name.
         id = db.Column(db.Integer,primary_key = True)
-        username = db.Column(db.String(255))
-        role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))      # This tells SQLAlchemy that this is a foreign key and is the ID of a Role model.
+        username = db.Column(db.String(255),index = True)
+        email = db.Column(db.String(255),unique = True,index = True)
+        role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))     # This tells SQLAlchemy that this is a foreign key and is the ID of a Role model.
+
+        pass_secure = db.Column(db.String(255))                  
+        @property                                                # use the @property decorator to create a write only class property password
+        def password(self):
+            raise AttributeError('You cannot read the password attribute')
+            
+        @password.setter
+        def password(self, password):
+            self.pass_secure = generate_password_hash(password)        #generates a password hash.
+
+
+        def verify_password(self,password):
+            return check_password_hash(self.pass_secure,password)     #takes in a hash password and a password entered by a user and checks if the password matches to return a True or False response.
+
 
         def __repr__(self):
             return f'User {self.username}'

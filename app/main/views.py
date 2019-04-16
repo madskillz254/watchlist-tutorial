@@ -3,6 +3,7 @@ from . import main
 from ..requests import get_movies,get_movie,search_movie
 from .forms import ReviewForm
 from ..models import Review
+from flask_login import login_required  #this decorator will intercept a request and check if the user is authenticated and if not the user will be redirected to the login page.
 
 #  We use one dot .modulename to import modules that are located within the same package, and two dots ..modulename for modules located in a package higher up in the project hierarchy.
 # We can now make the API call to get a particular category of movies
@@ -57,6 +58,7 @@ def search(movie_name):
 
 
 @main.route('/movie/review/new/<int:id>', methods = ['GET','POST']) #We also add the methods argument to our decorator which tells flask to register the view function as a handler for both GET and POST requests. When methods argument is not given the view function is registered to handle GET requests only.
+@login_required
 def new_review(id):
     form = ReviewForm()
     movie = get_movie(id)

@@ -3,12 +3,17 @@
 from app import create_app,db
 from flask_script import Manager,Server
 from app.models import User,Role
+from  flask_migrate import Migrate, MigrateCommand
+
 
 # Creating app instance
 app = create_app('development')
 
 manager = Manager(app)
 manager.add_command('server',Server)     # We use the add_command method to create a new command 'server' which will launch our application server.
+
+migrate = Migrate(app,db)
+manager.add_command('db',MigrateCommand)
 
 @manager.command                         #to create a new command.
 def test():                              #the test function that loads all the test files and runs them all
@@ -50,21 +55,12 @@ if __name__ == '__main__':
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     
 # python3 manage.py shell-- use this to access the shell                                                                           to create new user--user_christine = User(username = 'Christine') -- db.session.add_all([user_lisa,user_victor])--used to add multiple data to db
 # SQLAlchemy uses sessions as a storage location for our database changes. They mark changes as ready for saving and committing. eg db.session.add(user_christine)   db.session.commit() --to save changes to db
+# ------
+# about flask-migration
+# To use migrations we first need to Initialize our application to use Migrations. ie python3 manage.py db init
+# This will create a migrations folder in our root directory. This will be where our migration versions will be stored.
+# python3 manage.py db migrate -m "Initial Migration"-----to create first migration version 
+# python3.6 manage.py db upgrade ---this upgrades us to that version of the database--to downgrade just use downgrade instead of upgrade
