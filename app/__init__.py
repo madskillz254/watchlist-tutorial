@@ -1,8 +1,10 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from config import config_options
+from flask_sqlalchemy import SQLAlchemy
 
 bootstrap = Bootstrap()
+db = SQLAlchemy()
 
 def create_app(config_name):
     '''
@@ -15,6 +17,7 @@ this function allows us to add the configurations to the app effectively
 
     # Initializing flask extensions  We call the init_app() on an extension to complete on their initialization.
     bootstrap.init_app(app)
+    db.init_app(app)
 
     # Registering the blueprint
     from .main import main as main_blueprint
