@@ -1,8 +1,9 @@
 from flask import render_template,request,redirect,url_for,abort  #The request object is provided by flask and it encapsulates our HTTP request with all its arguments to the view function. --abort function, that stops a request, and returns a response according to the status code passed in
 from . import main
 from ..requests import get_movies,get_movie,search_movie
-from .forms import ReviewForm
+from .forms import ReviewForm,UpdateProfile
 from ..models import Review,User
+from .. import db                        #we will need it when saving profile information changes to the database.
 from flask_login import login_required  #this decorator will intercept a request and check if the user is authenticated and if not the user will be redirected to the login page.
 
 #  We use one dot .modulename to import modules that are located within the same package, and two dots ..modulename for modules located in a package higher up in the project hierarchy.
@@ -88,3 +89,23 @@ def profile(uname):
         abort(404)
 
     return render_template("profile/profile.html", user = user)
+
+
+@main.route('/user/<uname>/update',methods = ['GET','POST'])
+@login_required
+def update_profile(uname):
+    user = User.query.filter_by(username = uname).first()       #We query the database to find a user with the same username.
+    if user is None:
+        abort(404)
+
+    form = UpdateProfile()
+
+    if form.validate_on_submit():
+        user.bio = form.bio.data
+
+        db.session.add(user)
+        db.session.commit()
+
+        return redirect(url_for('.profile',uname=user.username))
+
+    return render_template('profile/update.html',form =form)
