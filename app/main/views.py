@@ -1,8 +1,8 @@
-from flask import render_template,request,redirect,url_for #The request object is provided by flask and it encapsulates our HTTP request with all its arguments to the view function.
+from flask import render_template,request,redirect,url_for,abort  #The request object is provided by flask and it encapsulates our HTTP request with all its arguments to the view function. --abort function, that stops a request, and returns a response according to the status code passed in
 from . import main
 from ..requests import get_movies,get_movie,search_movie
 from .forms import ReviewForm
-from ..models import Review
+from ..models import Review,User
 from flask_login import login_required  #this decorator will intercept a request and check if the user is authenticated and if not the user will be redirected to the login page.
 
 #  We use one dot .modulename to import modules that are located within the same package, and two dots ..modulename for modules located in a package higher up in the project hierarchy.
@@ -77,3 +77,14 @@ def new_review(id):
 # url_for() functions in Blueprints
 # Flask adds a namespace to all endpoints from a blueprint. The namespace is generally the name of the blueprint. 
 # For example the index() view function is registerd as url_for('main.index'). url_for also supports a shorthand format using .. url_for('main.index') can be shortened to url_for('.index')
+
+# a profile view function.
+
+@main.route('/user/<uname>')
+def profile(uname):
+    user = User.query.filter_by(username = uname).first()
+
+    if user is None:
+        abort(404)
+
+    return render_template("profile/profile.html", user = user)

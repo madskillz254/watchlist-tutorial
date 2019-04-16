@@ -63,6 +63,8 @@ class User(UserMixin,db.Model):               # We create a User class that will
         username = db.Column(db.String(255),index = True)
         email = db.Column(db.String(255),unique = True,index = True)
         role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))     # This tells SQLAlchemy that this is a foreign key and is the ID of a Role model.
+        bio = db.Column(db.String(255))                               # users biography 
+        profile_pic_path = db.Column(db.String())                     #stores the path of the profile photo
 
         pass_secure = db.Column(db.String(255))                  
         @property                                                # use the @property decorator to create a write only class property password
