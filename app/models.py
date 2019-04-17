@@ -2,6 +2,8 @@ from . import db
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from . import login_manager
+from datetime import datetime
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -25,36 +27,26 @@ class Movie:
 
 # to allow users to give reviews for movies they like.
 #a class defines how o build an object like how high how low etc
-class Review:
 
-    all_reviews = []
+class Review(db.Model):
+    __tablename__ = 'reviews'
 
-    def __init__(self,movie_id,title,imageurl,review):
-        self.movie_id = movie_id
-        self.title = title
-        self.imageurl = imageurl
-        self.review = review
+    id = db.Column(db.Integer,primary_key = True)
+    movie_id = db.Column(db.Integer)
+    movie_title = db.Column(db.String)
+    image_path = db.Column(db.String)
+    movie_review = db.Column(db.String)
+    posted = db.Column(db.DateTime,default=datetime.utcnow)  #We use in Python's datetime module to create a timestamp column posted. datetime.utcnow gets the current time and saves it to our database. 
+    user_id = db.Column(db.Integer,db.ForeignKey("users.id")) #Foreign key column where we store the id of the user who wrote the review.
 
-#to save the reviews
     def save_review(self):
-        Review.all_reviews.append(self)
+        db.session.add(self)
+        db.session.commit()
 
-#to delete or clear the reviews
-    @classmethod    
-    def clear_reviews(cls):
-        Review.all_reviews.clear()
-
-#  a method that will display all the reviews for a particular movie.
     @classmethod
     def get_reviews(cls,id):
-
-        response = []
-
-        for review in cls.all_reviews:
-            if review.movie_id == id:
-                response.append(review)
-
-        return response
+        reviews = Review.query.filter_by(movie_id=id).all()
+        return reviews
 
 
 class User(UserMixin,db.Model):               # We create a User class that will help us create new users. We pass in db.Model as an argument. This will connect our class to our database and allow communication.
@@ -65,6 +57,7 @@ class User(UserMixin,db.Model):               # We create a User class that will
         role_id = db.Column(db.Integer,db.ForeignKey('roles.id'))     # This tells SQLAlchemy that this is a foreign key and is the ID of a Role model.
         bio = db.Column(db.String(255))                               # users biography 
         profile_pic_path = db.Column(db.String())                     #stores the path of the profile photo
+        reviews = db.relationship('Review',backref = 'user',lazy = "dynamic")
 
         pass_secure = db.Column(db.String(255))                  
         @property                                                # use the @property decorator to create a write only class property password

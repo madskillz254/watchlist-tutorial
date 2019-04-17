@@ -3,8 +3,8 @@ from . import main
 from ..requests import get_movies,get_movie,search_movie
 from .forms import ReviewForm,UpdateProfile
 from ..models import Review,User
-from .. import db,photos                       #we will need it when saving profile information changes to the database.
-from flask_login import login_required  #this decorator will intercept a request and check if the user is authenticated and if not the user will be redirected to the login page.
+from .. import db,photos                               #we will need it when saving profile information changes to the database.
+from flask_login import login_required, current_user   #login_required decorator will intercept a request and check if the user is authenticated and if not the user will be redirected to the login page.
 
 #  We use one dot .modulename to import modules that are located within the same package, and two dots ..modulename for modules located in a package higher up in the project hierarchy.
 # We can now make the API call to get a particular category of movies
@@ -67,9 +67,13 @@ def new_review(id):
     if form.validate_on_submit(): #returns True when the form is submitted and all the data has been verified by the validators
         title = form.title.data
         review = form.review.data
-        new_review = Review(movie.id,title,movie.poster,review)
+
+        # Updated review instance
+        new_review = Review(movie_id=movie.id,movie_title=title,image_path=movie.poster,movie_review=review,user=current_user)
+
+        # save review method
         new_review.save_review()
-        return redirect(url_for('main.movie',id = movie.id ))
+        return redirect(url_for('.movie',id = movie.id ))
 
     title = f'{movie.title} review'
     return render_template('new_review.html',title = title, review_form=form, movie=movie)
