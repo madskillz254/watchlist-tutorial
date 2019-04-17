@@ -7,7 +7,7 @@ from  flask_migrate import Migrate, MigrateCommand
 
 
 # Creating app instance
-app = create_app('production')
+app = create_app('development')
 #test for testing ,development-during development and production -during production
 
 manager = Manager(app)
@@ -43,3 +43,8 @@ if __name__ == '__main__':
 # This will create a migrations folder in our root directory. This will be where our migration versions will be stored.
 # python3 manage.py db migrate -m "Initial Migration"-----to create first migration version 
 # python3.6 manage.py db upgrade ---this upgrades us to that version of the database--to downgrade just use downgrade instead of upgrade
+
+# !!crucial tip!!
+# if you encounter errors and decide to delete the migrations app also head to your database and drop the alembic_version table to avoid errors
+# heroku addons:create heroku-postgresql --(name of db)   this code just sets up the db on heroku and deals with the db url ..define this new Database URI inside our config.py
+#but to actually create a database schema on Heroku Ie specify the rows and columns youll have to type ---- heroku run python3 manage.py db upgrade
