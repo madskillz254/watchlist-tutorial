@@ -8,6 +8,15 @@ class Config:
     MOVIE_API_KEY = os.environ.get('MOVIE_API_KEY')
     SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://mugambi254:pitchdb@localhost/watchlist'   #this is the location of the database with authentication.
+    UPLOADED_PHOTOS_DEST ='app/static/photos'
+    # It is not advisable to store files inside the database. Instead we store the files inside our application and we store the path to the files in our database.
+
+    # #  email configurations
+    # MAIL_SERVER = 'smtp.googlemail.com'                  #Flask uses the Flask-Mail extension to send emails to users.
+    # MAIL_PORT = 587
+    # MAIL_USE_TLS = True                                  #enables a transport layer security to secure the emails when sending the emails.
+    # MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+    # MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
 
 
 class ProdConfig(Config): 

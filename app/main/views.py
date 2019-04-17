@@ -3,7 +3,7 @@ from . import main
 from ..requests import get_movies,get_movie,search_movie
 from .forms import ReviewForm,UpdateProfile
 from ..models import Review,User
-from .. import db                        #we will need it when saving profile information changes to the database.
+from .. import db,photos                       #we will need it when saving profile information changes to the database.
 from flask_login import login_required  #this decorator will intercept a request and check if the user is authenticated and if not the user will be redirected to the login page.
 
 #  We use one dot .modulename to import modules that are located within the same package, and two dots ..modulename for modules located in a package higher up in the project hierarchy.
@@ -109,3 +109,21 @@ def update_profile(uname):
         return redirect(url_for('.profile',uname=user.username))
 
     return render_template('profile/update.html',form =form)
+
+@main.route('/user/<uname>/update/pic',methods= ['POST'])
+@login_required
+def update_pic(uname):
+    user = User.query.filter_by(username = uname).first()
+    if 'photo' in request.files:
+        filename = photos.save(request.files['photo'])
+        path = f'photos/{filename}'
+        user.profile_pic_path = path
+        db.session.commit()
+    return redirect(url_for('main.profile',uname=uname))
+
+
+
+# We first import the photos instance from our application factory module. We then create a route that will process our form submission request. This route only accepts post requests.
+# We then query the database to pick a user with the same username we passed in. We then use the flask request function to check if any parameter with the name photo has been passed into the request.
+# We use the save method to save the file into our application. We then create a path variable to where the file is stored. We then update the profile_pic_path property in our user table and store the path to the file.
+# We finally commit the changes to the database and redirect the user back to the profile page.
