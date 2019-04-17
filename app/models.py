@@ -35,8 +35,8 @@ class Review(db.Model):
     movie_id = db.Column(db.Integer)
     movie_title = db.Column(db.String)
     image_path = db.Column(db.String)
-    # movie_review = db.Column(db.String)
-    # posted = db.Column(db.DateTime,default=datetime.utcnow)  #We use in Python's datetime module to create a timestamp column posted. datetime.utcnow gets the current time and saves it to our database. 
+    movie_review = db.Column(db.String)
+    posted = db.Column(db.DateTime,default=datetime.utcnow)  #We use in Python's datetime module to create a timestamp column posted. datetime.utcnow gets the current time and saves it to our database. 
     user_id = db.Column(db.Integer,db.ForeignKey("users.id")) #Foreign key column where we store the id of the user who wrote the review.
 
     def save_review(self):
