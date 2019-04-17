@@ -4,7 +4,7 @@ from ..models import User
 from .forms import LoginForm,RegistrationForm
 from .. import db
 from flask_login import login_user,logout_user,login_required
-# from ..email import mail_message  #--Sending Welcome Email enable this to use email service
+from ..email import mail_message  #--Sending Welcome Email enable this to use email service
 
 
 
@@ -39,7 +39,7 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        # mail_message("Welcome to watchlist","email/welcome_user",user.email,user=user) enamble this to send emails to  new users
+        # mail_message("Welcome to watchlist","email/welcome_user",user.email,user=user) 
 
         return redirect(url_for('auth.login'))
         title = "New Account"

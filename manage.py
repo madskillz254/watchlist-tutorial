@@ -32,29 +32,7 @@ def make_shell_context():
 
 if __name__ == '__main__':
     manager.run()
-    #  calling the run method on the Manager instance this will run the application.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    #  calling the run method on the Manager instance this will run the application
 
     
 # python3 manage.py shell-- use this to access the shell                                                                           to create new user--user_christine = User(username = 'Christine') -- db.session.add_all([user_lisa,user_victor])--used to add multiple data to db

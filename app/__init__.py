@@ -5,12 +5,11 @@ from config import config_options
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager  #an extension that helps us manage the user authentication system
 from flask_simplemde import SimpleMDE  #will help us create a simple markdown editor allowing us to write our review in markdown --- markdown2 is a module that will help us convert the markdown to HTML code that we can use in our template.
-
-# from flask_mail import Mail
+from flask_mail import Mail
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
-# mail = Mail()
+mail = Mail()
 simple = SimpleMDE()
 
 login_manager = LoginManager()
@@ -33,7 +32,7 @@ this function allows us to add the configurations to the app effectively
     bootstrap.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
-    # mail.init_app(app)
+    mail.init_app(app)
     simple.init_app(app)
 
     # configure UploadSet
