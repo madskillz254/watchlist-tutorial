@@ -1,5 +1,6 @@
 from flask import render_template,request,redirect,url_for,abort  #The request object is provided by flask and it encapsulates our HTTP request with all its arguments to the view function. --abort function, that stops a request, and returns a response according to the status code passed in
 from . import main
+import markdown2                                                     # responsible for the conversion from markdown to HTML.
 from ..requests import get_movies,get_movie,search_movie
 from .forms import ReviewForm,UpdateProfile
 from ..models import Review,User
@@ -77,6 +78,18 @@ def new_review(id):
 
     title = f'{movie.title} review'
     return render_template('new_review.html',title = title, review_form=form, movie=movie)
+
+
+@main.route('/review/<int:id>')
+@login_required
+def single_review(id):
+    review=Review.query.get(id)
+    if review is None:
+        abort(404)
+    format_review = markdown2.markdown(review.movie_review,extras=["code-friendly", "fenced-code-blocks"])
+    return render_template('review.html',review = review,format_review=format_review)
+
+
 
 
 # url_for() functions in Blueprints

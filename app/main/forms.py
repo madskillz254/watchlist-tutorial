@@ -5,7 +5,7 @@ from wtforms.validators import Required  #will prevent the user from submitting 
 class ReviewForm(FlaskForm):
 
     title = StringField('Review title',validators=[Required()])
-    review = TextAreaField('Movie review', validators=[Required()])
+    review = TextAreaField('Movie review')
     submit = SubmitField('Submit')
     # We Initialize the Field types by passing in two parameters. The first is the label and the second is a list of Validators where we initialize the Required validator.
  

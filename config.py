@@ -24,14 +24,8 @@ class Config:
 
 
 class ProdConfig(Config): 
-    '''
-    Production  configuration child class
-    this is a subclass ie all functions and methods declared in the parent class ie config will be extended or also made available to this class
+        SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
-    Args:
-        Config: The parent configuration class with General configuration settings
-    '''
-    pass
 
 class TestConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://mugambi254:pitchdb@localhost/watchlist_test'          # Here we create a new database watchlist_test. We use WITH TEMPLATE to copy the schema of the watchlist database so both databases can be identical. ie CREATE DATABASE watchlist_test WITH TEMPLATE watchlist
